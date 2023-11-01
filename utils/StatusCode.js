@@ -1,0 +1,9 @@
+export const STATUS = {
+    OK : 200,
+    CREATED : 201,
+    ACCEPTED : 202,
+    BADREQUEST: 400,
+    UNAUTHORIZED : 401,
+    NOTFOUND : 404,
+    SERVERERROR : 500
+}
