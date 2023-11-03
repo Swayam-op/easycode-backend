@@ -14,24 +14,52 @@ const UserSchema = new Schema({
         type:String,
         required: true
     },
-    profilepicture: String,
-    fullname: String,
-    bio: String,
-    location: String,
+    profilepicture: {
+        type:String,
+        default: ""
+    },
+    fullname: {
+        type:String,
+        default: ""
+    },
+    bio: {
+        type:String,
+        default: ""
+    },
+    location: {
+        type:String,
+        default: ""
+    },
     socialmedialinks: [String],
     languagepreference: String,
 
-    subscriptiontype: String,
-    subscriptionstatus: Number, // 0 | 1
+    subscriptiontype: {
+        type:String,
+        default: ""
+    },
+    subscriptionstatus: {
+        type:Number,
+        default: 0    }, // 0 | 1
+
     proficientin: [String], // react, node, ....
-    codinglevel: String, // beginner, intermediate, expert, og
+
+    codinglevel: {
+        type:String,
+        default: ""
+    }, // beginner, intermediate, expert, og
 
     solvedproblems: {}, // { sp: 10, submissions: 23 }
     recentactivity : [], // [problems solved, contests participated in]
     contributions: [], // blogs
 
-    accesstoken: String,
-    refreshtoken: String,
+    accesstoken: {
+        type:String,
+        default: ""
+    },
+    refreshtoken: {
+        type:String,
+        default: ""
+    },
 
     badges: [], // {batch_id : 1, batch_name: "diamond"}
     solutiontoproblems:[], //[ {qsn:1, solution: ....}, {qsn:2, solution: ....} ]
@@ -42,6 +70,6 @@ const UserSchema = new Schema({
 
 })
 
-const Users = mongoose.model("users", UserSchema);
+const User = mongoose.model("users", UserSchema);
 
-export default Users;
+export default User;

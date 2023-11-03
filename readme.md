@@ -7,4 +7,5 @@ mongoose
 axios
 jsonwebtoken
 cors
+bcrypt
  -->
