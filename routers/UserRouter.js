@@ -1,9 +1,11 @@
 import { Router } from "express";
-import {STATUS} from '../utils/StatusCode.js'
-import { login, signup } from "../controllers/UserController.js";
+import { authicationToken } from "../Middleware/Authentication.js";
+import { STATUS } from "../utils/StatusCode.js";
+import { getUserDetails } from "../controllers/UserController.js";
+
 const userRouter = Router();
 
-userRouter.post('/signup',signup);
-userRouter.post('/login', login);
+
+userRouter.get('/get-user-details',authicationToken, getUserDetails)
 
 export default userRouter;

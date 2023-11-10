@@ -21,7 +21,7 @@ export async function generateAccessToken(payload){
     const expiresIn = 3600; // 1 hour = 3600 seconds;
 
     //sign the jwt token with payload, secretKey and expiration time
-    const token = await jwt.sign(payload, secretKey, { expiresIn });
+    const token = jwt.sign(payload, secretKey, { expiresIn });
     return token;
 }
 
@@ -31,6 +31,18 @@ export async function generateRefreshToken(payload){
      const expiresIn = 86400; // 2 day = 86400 seconds;
  
      //sign the jwt token with payload, secretKey and expiration time
-     const token = await jwt.sign(payload, secretKey, { expiresIn });
+     const token = jwt.sign(payload, secretKey, { expiresIn });
      return token;
+}
+
+export function verifyToken(token){
+    const secretKey = process.env.SECRET_KEY;
+    try {
+        var decoded = jwt.verify(token, secretKey);
+        return decoded;
+      } catch(error) {
+        // err
+        console.log("Error in verify token : ",error);
+        return null;
+      }
 }

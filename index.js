@@ -2,6 +2,7 @@ import express from "express";
 import { configDotenv } from "dotenv";
 import cors from "cors";
 import userRouter from './routers/UserRouter.js';
+import AuthRouter from "./routers/AuthRouter.js";
 import mongoose from "mongoose";
 
 
@@ -35,7 +36,8 @@ mongoose.connect(process.env.MONGODB_URL,{
 
 
 //routers
-app.use('/v1/public_api',userRouter);
+app.use('/v1/public_api',AuthRouter);
+app.use('/v1/private_api',userRouter);
 
 app.listen(process.env.PORT,()=>{
     console.log(`server is listening on ${process.env.PORT}`);

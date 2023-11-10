@@ -66,7 +66,12 @@ const UserSchema = new Schema({
 
     contesthistory:[], //{ contestId, ranking}
 
-    useractivitylogs: [] // timestamp
+    useractivitylogs: [], // timestamp
+
+    isDelete : {
+        type: Boolean,
+        default : false
+    }
 
 })
 
