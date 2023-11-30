@@ -1,4 +1,4 @@
-import User from "../models/Users.js";
+import User from "../models/User.model.js";
 import { STATUS } from "../utils/StatusCode.js";
 
 

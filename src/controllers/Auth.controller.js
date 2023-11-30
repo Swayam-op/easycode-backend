@@ -1,10 +1,10 @@
-import User from "../models/Users.js";
+import User from "../models/User.model.js";
 import { STATUS } from "../utils/StatusCode.js";
 import { verifyToken, generateAccessToken, generateRefreshToken, compareUserPassword } from "../utils/AuthHelpers.js";
 import { validPassword, valideEmail } from "../utils/ValidationCheck.js";
 
 export async function loginByRefreshToken(req, res){
-    const refreshtoken = req.header('Authorization');
+    const {refreshtoken} = req.body;
     if(!refreshtoken){
         return res.status(STATUS.UNAUTHORIZED).json({message:"Access denied. No token provided"});
     }
@@ -34,7 +34,7 @@ export async function loginByRefreshToken(req, res){
     }
     catch(error)
     {
-        console.log("Error in auth loginbyRefreshTOken : ", error);
+        console.log("Error in auth loginbyRefreshTOken : ");
         return res.status(STATUS.UNAUTHORIZED).json({message:"Access denied. Invalid token"});
     }
 }

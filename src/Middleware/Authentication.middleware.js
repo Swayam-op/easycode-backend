@@ -1,4 +1,4 @@
-import User from "../models/Users.js";
+import User from "../models/User.model.js";
 import { verifyToken } from "../utils/AuthHelpers.js";
 import { STATUS } from "../utils/StatusCode.js";
 
@@ -25,7 +25,7 @@ export async function authicationToken(req, res, next){
     }
     catch(error)
     {
-        console.log("Error in auth middleware : ", error);
+        console.log("Error in auth middleware : ");
         return res.status(STATUS.UNAUTHORIZED).json({message:"Access denied. Invalid token"});
     }
 
