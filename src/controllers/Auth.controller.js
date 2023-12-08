@@ -1,6 +1,6 @@
 import User from "../models/User.model.js";
 import { STATUS } from "../utils/StatusCode.js";
-import { verifyToken, generateAccessToken, generateRefreshToken, compareUserPassword } from "../utils/AuthHelpers.js";
+import { hashPassword, verifyToken, generateAccessToken, generateRefreshToken, compareUserPassword } from "../utils/AuthHelpers.js";
 import { validPassword, valideEmail } from "../utils/ValidationCheck.js";
 
 export async function loginByRefreshToken(req, res){

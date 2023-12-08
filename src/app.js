@@ -15,10 +15,12 @@ app.use(express.static('public'));
 //import routers
 import userRouter from './routers/User.Router.js';
 import AuthRouter from "./routers/Auth.Router.js";
+import CodeRouter from "./routers/Code.Router.js";
+import QuestionRouter from "./routers/Question.Router.js";
 
 //use routers
 app.use('/v1/public_api',AuthRouter);
 app.use('/v1/private_api/user',userRouter);
-
-
+app.use('/v1/private_api/code',CodeRouter);
+app.use('v1/private_api/question',QuestionRouter);
 export {app};

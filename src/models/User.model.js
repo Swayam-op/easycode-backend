@@ -1,4 +1,4 @@
-import mongoose, { mongo } from "mongoose";
+import mongoose from "mongoose";
 import { Schema } from "mongoose";
 
 const UserSchema = new Schema({
@@ -48,7 +48,10 @@ const UserSchema = new Schema({
         default: ""
     }, // beginner, intermediate, expert, og
 
-    solvedproblems: {}, // { sp: 10, submissions: 23 }
+    solvedproblems: {
+        type : Object,
+        default : {sp : 0, submissions : 0}
+    }, // { sp: 10, submissions: 23 }
     recentactivity : [], // [problems solved, contests participated in]
     contributions: [], // blogs
 

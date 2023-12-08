@@ -12,13 +12,29 @@ chalk.level = 1; // Use colours in the VS Code Debug Window
 
 
 const url = process.env.MONGODB_MIGRATION_URL;
+const client = new MongoClient(url, {useNewUrlParser : true}); 
 console.log(url);
+
+async function connectToDb(){
+    try{
+        await client.connect();
+        const database = client.db("EASYCODELIVE");
+        return database;
+    }
+    catch(error){
+        throw error;
+    }
+}
+function closeConnection(){
+     client.close();
+}
+
 
 const dataChanges = [
     {
         filter : {},
         update : {$set : {
-            // username : "swayam",
+            // username : "nm",
             // password : "dhfjefkanfekj23j4u294r",
             // email: "swayam@gmail.com",
             // profilepicture : "",
@@ -31,7 +47,7 @@ const dataChanges = [
             // subscriptionstatus : 0,
             // proficientin : ["node", "react"],
             // codinglevel : "beginner",
-            // solvedproblems : {},
+            solvedproblems : {sp : 0, submissions : 0},
             // recentactivity : [`account created ${Date.now}`],
             // contributions: [],
             // accesstoken: "",
@@ -40,7 +56,7 @@ const dataChanges = [
             // solutiontoproblems : [],
             // contesthistory : [],
             // useractivitylogs : [],
-            isDelete: false
+            // isDelete: false
         }}
     }
 ];
@@ -121,5 +137,33 @@ async function migrattion_insert(){
     }
 }
 
-migrattion_update().catch((error)=>console.error("migration update failed : ",error));
+
+// ------------------------------ REMOVE ITEMS ---------------------------------
+
+const fileterData = [
+    {}
+]
+async function remove(){
+    try{
+        const database = await connectToDb();
+        const collection = database.collection("users");
+        let removed_data;
+        for(const filter of fileterData){
+            removed_data = await collection.deleteMany(filter);
+            
+        }
+        log(chalk.green("Data migration completed."));
+        log(chalk.yellow(`No. of items removed : ${removed_data.deletedCount}`));
+    }
+    catch(err){
+        log(chalk.red("Error during migration : ", err));
+    }
+    finally{
+        closeConnection();
+    }
+}
+
+
+// migrattion_update().catch((error)=>console.error("migration update failed : ",error));
 // migrattion_insert().catch(()=>console.error("migration failed"));
+remove().catch((error)=>{console.error("migration failed ", error)});
