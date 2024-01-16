@@ -44,3 +44,10 @@ export async function getUserDetails(req, res) {
         }
     });
 }
+
+
+export function isAuthenticated(req, res){
+    if(req.user){
+        return res.status(STATUS.OK).send({message:'User is authenticated', data : null})
+    }
+}

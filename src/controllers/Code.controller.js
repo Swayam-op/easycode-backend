@@ -1,25 +1,37 @@
 import axios from 'axios';
-import { compileAndRun } from '../utils/Code.utils.js';
+import { compileAndRun, convertOutputStringToArray } from '../utils/Code.utils.js';
 import { STATUS } from '../utils/StatusCode.js';
 import Code from '../models/Code.model.js';
 import Question from '../models/Question.model.js';
 import User from '../models/User.model.js';
 import chalk from 'chalk';
 import mongoose from 'mongoose';
-
 export async function runCode(req, res) {
-  const { language_id, source_code, stdin } = req.body;  // {language_id, source_code, stdin}
+  const { question_id, language_id, source_code } = req.body;  // {language_id, source_code, stdin}
   
+  //Use zod for req.body validation
   try {
-
-      const compiled_response = await compileAndRun(language_id, source_code, stdin);
+      console.log("Body of runCode : ",req.body);
+      const question = await Question.findOne({_id : question_id});
+      const originalSourceCode = question.hiddenCode[0] + " " + source_code + " "+ question.hiddenCode[1];
+      const inputs = question.testCases;
+      const expected_output = question.expectedOutputOfTestCases;
+      console.log("Original code : ",originalSourceCode);
+      const compiled_response = await compileAndRun(language_id, originalSourceCode, inputs, expected_output);
       console.log(compiled_response);
-      const response_message = compiled_response.message ? atob(compiled_response.message) : "Code runs successfully";
+      console.log("status : ", atob(compiled_response.expected_output));
+      const response_message = compiled_response.status.description;
+      // console.log("output of code is : ", convertOutputStringToArray(atob(compiled_response.stdout)));
       const response_data = {
-        output: compiled_response.stdout ? atob(compiled_response.stdout) : "",
         error_message: compiled_response.stderr ? atob(compiled_response.stderr) : "",
+        runTime_message : compiled_response.message ? atob(compiled_response.message) : "",
         time_taken: compiled_response.time,
-        memory : compiled_response.memory
+        memory : compiled_response.memory,
+        compile_output : compiled_response.compile_output ? atob(compiled_response.compile_output):"",
+        output: compiled_response.stdout ? atob(compiled_response.stdout) : "",
+        outputToDisplay : compiled_response.stdout ?convertOutputStringToArray(atob(compiled_response.stdout)) : [],
+        expectedOutputToDisplay : question.expectedOutputOfTestCasesToDisplay,
+        testCasesToDisplay: question.testCasesToDisplay
       }
       return res.status(STATUS.ACCEPTED).json({ message: response_message, data: response_data });
 
@@ -33,6 +45,8 @@ export async function runCode(req, res) {
 
 export async function submitCode(req, res) {
   //Get all the information
+  const pt = Date.now();
+  console.log(chalk.red("start time", pt));
   console.log(req.user);
   try {
     const { question_id, language_id, source_code } = req.body;
@@ -45,23 +59,39 @@ export async function submitCode(req, res) {
     const question = await Question.findOne({_id : question_id, isDelete : false});
     console.log(question)
     const hiddenTestCases = question.hiddenTestCases;
-
+    const originalSourceCode = question.hiddenCode[0] + " " + source_code + " "+ question.hiddenCode[1];
+    const expected_output = question.expectedOutputOfHiddenTestCases;
+    console.log(chalk.red("before compilation time", Date.now() - pt));
     // Run code
-    const compiled_response = await compileAndRun(language_id, source_code, hiddenTestCases[0].input);
+    const compiled_response = await compileAndRun(language_id, originalSourceCode, hiddenTestCases, expected_output);
     console.log(chalk.green("Code compiled successfully"));
     // console.log(compiled_response);
 
-    let response_message;
-    let response_data = {};
-    if(compiled_response.message){
-      response_message =  atob(compiled_response.message);
-      response.data["error_message"] = atob(compiled_response.stderr);
-    }
-    else{
-      const compiled_output = atob(compiled_response.stdout);
-
-      //if compiled_output answer matches to hidden testcase's expected answer
-      if(hiddenTestCases[0].output.indexOf(compiled_output)){
+    //Updating response_data
+    let response_message = compiled_response.status.description;
+      
+    let response_data = {
+      error_message: compiled_response.stderr ? atob(compiled_response.stderr) : "",
+      runTime_message : compiled_response.message ? atob(compiled_response.message) : "",
+      time_taken: compiled_response.time,
+      memory : compiled_response.memory/1024,
+      compile_output : compiled_response.compile_output ? atob(compiled_response.compile_output):"",
+      output: compiled_response.stdout ? atob(compiled_response.stdout) : "",
+      outputToDisplay : compiled_response.stdout ?convertOutputStringToArray(atob(compiled_response.stdout)) : [],
+      expectedOutputToDisplay : question.expectedOutputOfHiddenTestCasesToDisplay,
+      hiddenTestCasesToDisplay:question.hiddenTestCasesToDisplay,
+      expectedOutputOfHiddenTestCases : question. expectedOutputOfHiddenTestCases,
+      submitedAtTime : new Date().toLocaleString(),
+      source_code : source_code,
+      statusId : compiled_response.status.id
+    } 
+    response_message = compiled_response.status.description;
+    
+   res.status(STATUS.ACCEPTED).json({
+    message : response_message,
+    data : response_data
+  });
+ console.log(chalk.red("Time after res ssent ", Date.now() - pt));
         //Create one Code Object
         const submitted_code = new Code({
           question : question._id,
@@ -69,46 +99,64 @@ export async function submitCode(req, res) {
           sourceCode : source_code,
           language : language_id,
           timeTaken : compiled_response.time,
-          memory : compiled_response.memory
+          memory : compiled_response.memory,
+          status : compiled_response.status.description,
+          status_id : compiled_response.status.id,
+          
         });
         await submitted_code.save();
         console.log(chalk.green("submission code is created"));
         
         //update user details
-        user.solvedproblems = {...user.solvedproblems, ["sp"] : user.solvedproblems.sp? user.solvedproblems.sp+1 : 1};
-        user.solutiontoproblems.push({question : question._id, solution : submitted_code._id});
-        user.recentactivity.push({name : "Code submission", message : "Accepted", question_id : question._id, date : new Date().toLocaleString() });
-        
-        //update reeponse
-        response_message = "Submission Accepted";
-        response_data["success"] = true;
-      }
-      else{
-      user.recentactivity.push({name : "Code submission", message : "Wrong submission", question_id : question._id, date : new Date().toLocaleString() });
-      response_message = "Wrong Submission";
-      response_data["success"] = false;
-      }
+        user.submissions.push({question_id : question._id, submission_id : submitted_code._id});
+        user.recentactivity.push({name : "Code submission", message : compiled_response.status.description, description : question.questionName, date : new Date().toLocaleString() });
+        const isSolvedAlready = user.solvedQuestions.filter((item)=>item === question._id);
+        if(!isSolvedAlready){
+          user.solvedQuestions.push(question._id);
+        }
       // console.log(user.solvedproblems);
-      user.solvedproblems = {...user.solvedproblems, ["submissions"] : user.solvedproblems.submissions? user.solvedproblems.submissions+1 : 1}
       await user.save();
       console.log(chalk.green("User details is updated", user));
-
-      //Updating response_data
-      response_data["testCase"] = question.hiddenTestCases[0].input;
-      response_data["output"] = compiled_output;
-      response_data["expected_output"] = hiddenTestCases[0].output;
-      response_data["time"] = compiled_response.time;
-      response_data["memory"] = compiled_response.memory;
       
+      console.log(chalk.red("after user update time", Date.now() - pt));
 
-      return res.status(STATUS.ACCEPTED).json({
-        message : response_message,
-        data : response_data
-      });
-    }
+      return;
   }
   catch (error) {
     console.log(chalk.red("Error in submission controller : ", error));
     return res.status(STATUS.SERVERERROR).json({message : error.message});
   }
+}
+
+
+export async function runCodeForTesting(req, res) {
+  const { question_id, language_id, source_code, stdin, expected_output } = req.body;  // {language_id, source_code, stdin}
+  
+  try {
+      console.log(expected_output);
+      const compiled_response = await compileAndRun(language_id, source_code, stdin, expected_output);
+      console.log(compiled_response);
+      console.log("status : ", atob(compiled_response.expected_output));
+      const response_message = compiled_response.status.description;
+      console.log("output of code is : ", convertOutputStringToArray(atob(compiled_response.stdout)));
+      const response_data = {
+        error_message: compiled_response.stderr ? atob(compiled_response.stderr) : "",
+        runTime_message : compiled_response.message ? atob(compiled_response.message) : "",
+        time_taken: compiled_response.time,
+        memory : compiled_response.memory/1024,
+        compile_output : compiled_response.compile_output ? atob(compiled_response.compile_output):"",
+        output: compiled_response.stdout ? atob(compiled_response.stdout) : "",
+        outputToDisplay : compiled_response.stdout ?convertOutputStringToArray(atob(compiled_response.stdout)) : [],
+        submitedAtTime : new Date().toLocaleString(),
+        source_code : source_code,
+        statusId : compiled_response.status.id
+      }
+      return res.status(STATUS.ACCEPTED).json({ message: response_message, data: response_data });
+
+  }
+  catch (error) {
+    console.log("Error in runCode controller : ", error);
+    return res.status(STATUS.BADREQUEST).json({ message: error.message });
+  }
+
 }

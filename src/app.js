@@ -22,5 +22,17 @@ import QuestionRouter from "./routers/Question.Router.js";
 app.use('/v1/public_api',AuthRouter);
 app.use('/v1/private_api/user',userRouter);
 app.use('/v1/private_api/code',CodeRouter);
-app.use('v1/private_api/question',QuestionRouter);
+app.use('/v1/private_api/question',QuestionRouter);
+
+
+
+//Global Error Middleware
+app.use((err, req, res, next)=>{
+        const status = err.status || 500;
+        const message = err.message;
+        const data = err.data || null;
+        console.log("Aa vitare");
+        return res.status(status).send({message, data});
+})
+
 export {app};

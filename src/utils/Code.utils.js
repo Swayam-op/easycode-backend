@@ -19,11 +19,12 @@ const checkCodeStatus = async (token) => {
   }
 };
 
-const compileCode = async (language_id, source_code, stdin) => {
+const compileCode = async (language_id, source_code, stdin, expected_output) => {
   const encoded_data = {
     language_id,
     source_code: btoa(source_code),
-    stdin: btoa(stdin)
+    stdin: btoa(stdin),
+    expected_output : btoa(expected_output)
   };
   const options = {
     method: "POST",
@@ -48,13 +49,14 @@ const compileCode = async (language_id, source_code, stdin) => {
   }
 }
 
-const compileAndRun = async(language_id, source_code, stdin) =>{
+const compileAndRun = async(language_id, source_code, stdin, expected_output) =>{
   try{
-    const response = await compileCode(language_id, source_code, stdin);
+    const response = await compileCode(language_id, source_code, stdin, expected_output);
     
     //Sometimes after compilation of code, the compiled_token does not fetch data, so here we call checkCode until we get result
        let check_response = null;
-       while( check_response == null || check_response.time == null){
+       while( check_response == null || check_response.status.id == 2){
+        await takeTime(500);
         check_response = await checkCodeStatus(response.data.token);
        }
        
@@ -65,5 +67,19 @@ const compileAndRun = async(language_id, source_code, stdin) =>{
   catch(error){
     throw error;
   }
+}
+
+function takeTime(time){
+  return new Promise((resolve)=>{
+    setTimeout(()=>{
+      resolve();
+    },time);
+  })
+}
+
+export function convertOutputStringToArray(output){
+  let output_array = output.split('\n');
+  if(output_array[output_array.length - 1] === '')output_array.pop();
+  return output_array;
 }
 export { checkCodeStatus, compileCode, compileAndRun };

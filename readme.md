@@ -9,3 +9,6 @@ jsonwebtoken
 cors
 bcrypt
  -->
+
+ todo :
+ Add zod in each controller

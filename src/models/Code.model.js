@@ -18,6 +18,8 @@ const schema = new Schema({
     stdout : String,
     timeTaken : String,
     memory : String,
+    status : String,
+    status_id : Number,
     isDelete : {
         type: Boolean,
         default : false

@@ -48,10 +48,10 @@ const UserSchema = new Schema({
         default: ""
     }, // beginner, intermediate, expert, og
 
-    solvedproblems: {
-        type : Object,
-        default : {sp : 0, submissions : 0}
-    }, // { sp: 10, submissions: 23 }
+    // solvedproblems: {
+    //     type : Object,
+    //     default : {sp : 0, submissions : 0}
+    // }, // { sp: 10, submissions: 23 }
     recentactivity : [], // [problems solved, contests participated in]
     contributions: [], // blogs
 
@@ -65,8 +65,8 @@ const UserSchema = new Schema({
     },
 
     badges: [], // {batch_id : 1, batch_name: "diamond"}
-    solutiontoproblems:[], //[ {qsn:1, solution: ....}, {qsn:2, solution: ....} ]
-
+    submissions:[], //[ {qsn:1, submission_id:323423}, ]
+    solvedQuestions : [], //[id1, id2, id3]
     contesthistory:[], //{ contestId, ranking}
 
     useractivitylogs: [], // timestamp
