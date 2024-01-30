@@ -1,4 +1,7 @@
 import axios from "axios";
+// const axiosRetry = require('axios-retry');
+
+// axiosRetry(axios, { retries: 3, retryDelay: axiosRetry.exponentialDelay });
 
 const checkCodeStatus = async (token) => {
   const options = {

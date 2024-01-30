@@ -3,33 +3,53 @@ import Question from "../models/Question.model.js";
 import { STATUS } from "../utils/StatusCode.js";
 import { ApiError } from "../utils/ApiError.js";
 import { validateObjectId } from "../utils/ZodSchema.js";
-
+import { ObjectId } from "mongodb";
 export async function getQuestions(req, res) {
   try {
-    let solvedQuestions = [];
-    let hasAttempted = [];
+    let conditions = [
+      { $eq: ['$question', '$$questionId'] },
+    ]
     // console.log(req.user);
     if (req.user) {
-      solvedQuestions = req.user.solvedQuestions;
-      hasAttempted = req.user.submissions.map((item) => item.question_id);
+      conditions = [      { $eq: ['$question', '$$questionId'] },
+      { $eq: ['$user',new ObjectId(req.user._id)] },
+      {$eq : ["$status", "Accepted"]}]
     }
-    // console.log("solved Questions", solvedQuestions);
+
     const questions = await Question.aggregate([
       {
-        $project: {
-          _id: 1,
-          questionName: 1,
-          level: 1,
-          // Include other selected properties
-          hasSolvedProblem: {
-            $in: ["$_id", solvedQuestions],
-          },
-          hasAttempted: {
-            $in: ["$_id", hasAttempted],
-          },
-        },
+        $lookup: {
+          from: 'submissions',
+          let: { questionId: '$_id' },
+          pipeline: [
+            {
+              $match: {
+                $expr: {
+                  $and: conditions
+                }
+              }
+            }
+          ],
+          as: 'userSubmission'
+        }
       },
+      {
+        $addFields: {
+          hasSubmission: { $gt: [{ $size: '$userSubmission' }, 0] }
+        }
+      },
+      {
+        $project: {
+          _id : 1,
+          questionNo : 1,
+          questionName : 1,
+          level : 1,
+          hasSolved : "$hasSubmission"
+          // Exclude the userSubmission field from the final result if not needed
+        }
+      }
     ]).exec();
+    // console.log("questions are ", )
     return res.status(STATUS.OK).send({ message: "Success", data: questions });
   } catch (error) {
     console.log(chalk.red("Error in getQuestion controller : ", error));

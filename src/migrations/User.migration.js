@@ -42,19 +42,18 @@ const dataChanges = [
                 // fullname : "swayam prakash sahoo",
                 // bio : "I am an uchiha",
                 // location : "Leaf village",
-                // socialmedialinks : ["swayam-op.web.app"],
+                // linkdin : Object, //{name, url}
+                // portfolio : String, // 
+                // college : Stirng, //
+                // company : String, // 
+                // github : Object, // {name , url}
+                // twitter : Object, // {name , url}
                 // languagepreference : "c++",
-                // subscriptiontype : "",
-                // subscriptionstatus : 0,
                 // proficientin : ["node", "react"],
                 // codinglevel : "beginner",
-                // recentactivity : [{name : "Account Creation", message : "Successful", description : "Swayam_op", date : new Date().toLocaleString() }],
-                // contributions: [],
                 // accesstoken: "",
                 // refreshtoken: "",
                 // badges: [],
-                // submissions:[],
-                //solvedQuestions : [],
                 // contesthistory : [],
                 // useractivitylogs : [],
                 // isDelete: false
@@ -97,19 +96,27 @@ const new_entries = [{
     fullname: "swayam prakash sahoo",
     bio: "I am an uchiha",
     location: "Leaf village",
-    socialmedialinks: ["swayam-op.web.app"],
+    linkdin : {
+        name : "swayamprakash",
+        url  : "https//:linkedin.com/swayam"
+    }, 
+    portfolio : "swayam-op.web.app", 
+    college : "Gandhi institute For Technology", 
+    company : "Coforge",  
+    github : {
+        name : "swayam_op",
+        url : "https//:linkedin.com/swayam"
+    }, 
+    twitter : {
+        name : "swayam_op",
+        url : "https//:linkedin.com/swayam"
+    },
     languagepreference: "c++",
-    subscriptiontype: "",
-    subscriptionstatus: 0,
     proficientin: ["node", "react"],
     codinglevel: "beginner",
-    recentactivity: [{ name: "Account Creation", message: "Successful", description: "Swayam_op", date: new Date().toLocaleString() }],
-    contributions: [],
     accesstoken: "",
     refreshtoken: "",
     badges: [],
-    submissions: [],
-    solvedQuestions: [],
     contesthistory: [],
     useractivitylogs: [],
     isDelete: false

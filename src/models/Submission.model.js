@@ -28,6 +28,6 @@ const schema = new Schema({
     timestamps : true
 })
 
-const Code = mongoose.model('code', schema);
+const Submission = mongoose.model('submission', schema);
 
-export default Code;
+export default Submission;

@@ -1,5 +1,7 @@
+
 import mongoose from "mongoose";
 import { Schema } from "mongoose";
+
 
 const UserSchema = new Schema({
     username:{
@@ -30,16 +32,21 @@ const UserSchema = new Schema({
         type:String,
         default: ""
     },
-    socialmedialinks: [String],
+    linkdin : Object, //{name, url}
+    portfolio : String, // 
+    college : String, //
+    company : String, // 
+    github : Object, // {name , url}
+    twitter : Object, // {name , url}
     languagepreference: String,
 
-    subscriptiontype: {
-        type:String,
-        default: ""
-    },
-    subscriptionstatus: {
-        type:Number,
-        default: 0    }, // 0 | 1
+    // subscriptiontype: {
+    //     type:String,
+    //     default: ""
+    // },
+    // subscriptionstatus: {
+    //     type:Number,
+    //     default: 0    }, // 0 | 1
 
     proficientin: [String], // react, node, ....
 
@@ -48,12 +55,7 @@ const UserSchema = new Schema({
         default: ""
     }, // beginner, intermediate, expert, og
 
-    // solvedproblems: {
-    //     type : Object,
-    //     default : {sp : 0, submissions : 0}
-    // }, // { sp: 10, submissions: 23 }
-    recentactivity : [], // [problems solved, contests participated in]
-    contributions: [], // blogs
+    // contributions: [], // blogs
 
     accesstoken: {
         type:String,
@@ -65,8 +67,7 @@ const UserSchema = new Schema({
     },
 
     badges: [], // {batch_id : 1, batch_name: "diamond"}
-    submissions:[], //[ {qsn:1, submission_id:323423}, ]
-    solvedQuestions : [], //[id1, id2, id3]
+
     contesthistory:[], //{ contestId, ranking}
 
     useractivitylogs: [], // timestamp
