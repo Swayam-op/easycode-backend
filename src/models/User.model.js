@@ -18,7 +18,7 @@ const UserSchema = new Schema({
     },
     profilepicture: {
         type:String,
-        default: ""
+        default: "https://wallpapers.com/images/high/naruto-pictures-qmc3mjl3e42475o4.webp"
     },
     fullname: {
         type:String,
@@ -32,30 +32,47 @@ const UserSchema = new Schema({
         type:String,
         default: ""
     },
-    linkdin : Object, //{name, url}
-    portfolio : String, // 
-    college : String, //
-    company : String, // 
-    github : Object, // {name , url}
-    twitter : Object, // {name , url}
+    linkdin : {
+        type : Object,
+        default : {
+            name : "",
+            url : ""
+        }
+    }, //{name, url}
+    portfolio : {
+        type : String,
+        default : ""
+    }, // 
+    college : {
+        type : String,
+        default : ""
+    }, //
+    company : {
+        type : String,
+        default : ""
+    }, // 
+    github : {
+        type : Object,
+        default : {
+            name : "",
+            url : ""
+        }
+    }, // {name , url}
+    twitter : {
+        type : Object,
+        default : {
+            name : "",
+            url : ""
+        }
+    }, // {name , url}
     languagepreference: String,
-
-    // subscriptiontype: {
-    //     type:String,
-    //     default: ""
-    // },
-    // subscriptionstatus: {
-    //     type:Number,
-    //     default: 0    }, // 0 | 1
 
     proficientin: [String], // react, node, ....
 
     codinglevel: {
         type:String,
-        default: ""
+        default: "beginner"
     }, // beginner, intermediate, expert, og
-
-    // contributions: [], // blogs
 
     accesstoken: {
         type:String,

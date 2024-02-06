@@ -32,28 +32,39 @@ function closeConnection() {
 
 const dataChanges = [
     {
-        filter: {},
+        filter: {
+            username : "nm"
+        },
         update: {
             $set: {
-                // username : "nm",
+                username : "nm_volte",
                 // password : "dhfjefkanfekj23j4u294r",
-                // email: "swayam@gmail.com",
-                // profilepicture : "",
-                // fullname : "swayam prakash sahoo",
-                // bio : "I am an uchiha",
-                // location : "Leaf village",
-                // linkdin : Object, //{name, url}
-                // portfolio : String, // 
-                // college : Stirng, //
-                // company : String, // 
-                // github : Object, // {name , url}
-                // twitter : Object, // {name , url}
-                // languagepreference : "c++",
-                // proficientin : ["node", "react"],
-                // codinglevel : "beginner",
+                email: "nm@gmail.com",
+                profilepicture : "https://wallpapers.com/images/high/naruto-pictures-qmc3mjl3e42475o4.webp",
+                fullname : "NM baibhab",
+                bio : "I am a MERN Stack developer focusing on solving competitive questions and making a good rank. Lorem ipsum dolor sit amet consectetur adipisicing elit. Nemo, nisi.",
+                // location : "Badamba, Odisha, India",
+                linkdin : {
+                    name : "nm baibhab",
+                    url : "https://linkedin.com/nm"
+                },
+                portfolio : "https://swayam-op.web.app", // 
+                college : "Gandhi Institute For Technology", //
+                company : "Delta X", // 
+                github : {
+                    name : "Nm baibhab github",
+                    url : "https://github.com/nm"
+                }, // {name , url}
+                twitter : {
+                    name : "nm twitter",
+                    url : "https://twitter.com/nm"
+                }, // {name , url}
+                languagepreference : "C++",
+                proficientin : ["node", "react", "Java script", "Python", "Docker", "AWS", "SQL", "Mongodb", "Nungurami"],
+                codinglevel : "beginner",
                 // accesstoken: "",
                 // refreshtoken: "",
-                // badges: [],
+                badges: ["itachi", "kakashi", "naruto"],
                 // contesthistory : [],
                 // useractivitylogs : [],
                 // isDelete: false
@@ -174,6 +185,6 @@ async function remove() {
 }
 
 
-// migrattion_update().catch((error)=>console.error("migration update failed : ",error));
-migrattion_insert().catch(()=>console.error("migration failed"));
+migrattion_update().catch((error)=>console.error("migration update failed : ",error));
+// migrattion_insert().catch(()=>console.error("migration failed"));
 // remove().catch((error) => { console.error("migration failed ", error) });

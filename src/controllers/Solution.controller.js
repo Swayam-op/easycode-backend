@@ -114,26 +114,7 @@ export const getSolutions = asyncHandler(async(req, res)=>{
     console.log(chalk.green("Solution list is sent", solutions, "skip : ",parseInt(skip)));
 })
 
-export const addViewsToSolution = asyncHandler(async(req, res)=>{
-    const {solutionId} = req.query;
-    const userId = req.user._id;
-    console.log("solutionId in views: ", solutionId);
-    const validate = validateObjectId({_id : solutionId});
-    console.log("solutionId in views: ", solutionId);
-    if (!validate.success) {
-      throw new ApiError(STATUS.BADREQUEST, validate.message);
-    }
-    const isViewed = await Solution_Views.countDocuments({solution:solutionId, user : userId});
-    if(isViewed === 0){
-        const view = new Solution_Views({
-            solution : solutionId,
-            user : userId
-        });
-        await view.save();
-        console.log("view is done. ", view);
-    }
-    
-})
+
 
 // if liked then remove, or add
 export const alterLikesToSolution = asyncHandler(async(req, res)=>{
@@ -166,6 +147,7 @@ export const getDetailsOfSolution = asyncHandler(async(req, res)=>{
     if (!validate.success) {
         throw new ApiError(STATUS.BADREQUEST, validate.message);
     }
+    await addViewsToSolution(solutionId, userId);
     let solution = await Solution.aggregate([
         {
           $match: {
@@ -235,3 +217,20 @@ export const getDetailsOfSolution = asyncHandler(async(req, res)=>{
     res.status(STATUS.OK).send({message : 'Ok', data : solution[0] || null});
     console.log(chalk.green("Solution list is sent", solution[0]));
 })
+
+const addViewsToSolution = async(solutionId, userId)=>{
+  return new Promise(async(resolve)=>{
+    console.log("solutionId in views: ", solutionId);
+    console.log("solutionId in views: ", solutionId);
+    const isViewed = await Solution_Views.countDocuments({solution:solutionId, user : userId});
+    if(isViewed === 0){
+        const view = new Solution_Views({
+            solution : solutionId,
+            user : userId
+        });
+        await view.save();
+        console.log("view is done. ", view);
+    }
+    resolve();
+  })
+}
