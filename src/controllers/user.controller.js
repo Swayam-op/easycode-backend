@@ -6,8 +6,9 @@ import Solution from "../models/Solutions.model.js";
 import Submission from "../models/Submission.model.js";
 import Question from "../models/Question.model.js";
 import cloudinary from "../utils/Cloudnary.js";
-import fs from 'fs';
 import { ApiError } from "../utils/ApiError.js";
+import streamifier from 'streamifier';
+import fs from 'fs';
 
 export const getUserDetails = asyncHandler(async (req, res) => {
     const userId = req.user._id;
@@ -105,7 +106,8 @@ export const uploadProfilePicture = asyncHandler(async (req, res) => {
             throw new ApiError(STATUS.BADREQUEST, 'Please select a file');
         }
         console.log("file path in upload picture controller")
-        const result = await cloudinary.uploader.upload(file.buffer);
+
+        const result = await streamUpload(req);
         // Send the Cloudinary URL of the uploaded image back to the frontend
 
         res.status(STATUS.ACCEPTED).json({ message: "Image uploaded successfully", data: { imageUrl: result.secure_url } });
@@ -123,3 +125,22 @@ export const uploadProfilePicture = asyncHandler(async (req, res) => {
     //     console.log('File deleted successfully');
     // });
 })
+
+
+
+
+let streamUpload = (req) => {
+
+    return new Promise((resolve, reject) => {
+        let stream = cloudinary.uploader.upload_stream((error, result) => {
+            if (result) {
+                resolve(result);
+            } else {
+                reject(error);
+            }
+        });
+        const readableStream = streamifier.createReadStream(req.file.buffer);
+        readableStream.pipe(stream);
+    });
+  
+  };
