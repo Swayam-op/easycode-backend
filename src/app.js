@@ -37,6 +37,10 @@ import { create } from "domain";
 
 
 //API TESTING
+app.get('/',(req, res)=>{
+  res.json({message : "home"});
+})
+
 app.get('/test',(req, res)=>{
   res.json({message : "working"});
 })
