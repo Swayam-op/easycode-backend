@@ -103,6 +103,14 @@ export const uploadProfilePicture = asyncHandler(async (req, res) => {
         if (!req.file || !req.file.path) {
             throw new ApiError(STATUS.BADREQUEST, 'Please select a file');
         }
+        console.log("file path in upload picture controller", req.file.path)
+        fs.access(req.file.path, fs.constants.F_OK, (err) => {
+            if (err) {
+                throw new ApiError(STATUS.BADREQUEST, "File is not present in public/uploads");
+            }
+        
+            console.log('File exists');
+        });
         const result = await cloudinary.uploader.upload(req.file.path);
         // Send the Cloudinary URL of the uploaded image back to the frontend
 
