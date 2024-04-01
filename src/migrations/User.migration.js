@@ -33,38 +33,32 @@ function closeConnection() {
 const dataChanges = [
     {
         filter: {
-            username : "nm"
+           
         },
         update: {
             $set: {
-                username : "nm_volte",
+                // username : "nm_volte",
                 // password : "dhfjefkanfekj23j4u294r",
-                email: "nm@gmail.com",
+                // email: "nm@gmail.com",
                 profilepicture : "https://wallpapers.com/images/high/naruto-pictures-qmc3mjl3e42475o4.webp",
-                fullname : "NM baibhab",
+                // fullname : "NM baibhab",
                 bio : "I am a MERN Stack developer focusing on solving competitive questions and making a good rank. Lorem ipsum dolor sit amet consectetur adipisicing elit. Nemo, nisi.",
                 // location : "Badamba, Odisha, India",
-                linkdin : {
-                    name : "nm baibhab",
-                    url : "https://linkedin.com/nm"
-                },
+                linkdin :  "https://linkedin.com/nm"
+                ,
                 portfolio : "https://swayam-op.web.app", // 
                 college : "Gandhi Institute For Technology", //
                 company : "Delta X", // 
-                github : {
-                    name : "Nm baibhab github",
-                    url : "https://github.com/nm"
-                }, // {name , url}
-                twitter : {
-                    name : "nm twitter",
-                    url : "https://twitter.com/nm"
-                }, // {name , url}
+                github : "https://github.com/nm"
+                , // {name , url}
+                twitter : "https://twitter.com/nm"
+                , // {name , url}
                 languagepreference : "C++",
                 proficientin : ["node", "react", "Java script", "Python", "Docker", "AWS", "SQL", "Mongodb", "Nungurami"],
                 codinglevel : "beginner",
                 // accesstoken: "",
                 // refreshtoken: "",
-                badges: ["itachi", "kakashi", "naruto"],
+                // badges: ["itachi", "kakashi", "naruto"],
                 // contesthistory : [],
                 // useractivitylogs : [],
                 // isDelete: false

@@ -111,7 +111,7 @@ export const getSolutions = asyncHandler(async(req, res)=>{
         
       ]);
     res.status(STATUS.OK).send({message : 'Ok', data : solutions});
-    console.log(chalk.green("Solution list is sent", solutions, "skip : ",parseInt(skip)));
+    console.log(chalk.green("Solution list is sent",JSON.stringify(solutions), "skip : ",parseInt(skip)));
 })
 
 
@@ -131,10 +131,10 @@ export const alterLikesToSolution = asyncHandler(async(req, res)=>{
             solution : solutionId
         })
         await like.save();
-        console.lod("like is added");
+        console.log("like is added");
     }
     else{
-        await Solution_Likes.deleteOne({question:questionId, user : userId});
+        await Solution_Likes.deleteOne({solution:solutionId, user : userId});
         console.log("like is removed");
     }
 })

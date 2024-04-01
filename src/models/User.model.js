@@ -18,7 +18,7 @@ const UserSchema = new Schema({
     },
     profilepicture: {
         type:String,
-        default: "https://wallpapers.com/images/high/naruto-pictures-qmc3mjl3e42475o4.webp"
+        default: ""
     },
     fullname: {
         type:String,
@@ -33,11 +33,8 @@ const UserSchema = new Schema({
         default: ""
     },
     linkdin : {
-        type : Object,
-        default : {
-            name : "",
-            url : ""
-        }
+        type : String
+        
     }, //{name, url}
     portfolio : {
         type : String,
@@ -52,18 +49,10 @@ const UserSchema = new Schema({
         default : ""
     }, // 
     github : {
-        type : Object,
-        default : {
-            name : "",
-            url : ""
-        }
+        type : String,
     }, // {name , url}
     twitter : {
-        type : Object,
-        default : {
-            name : "",
-            url : ""
-        }
+        type : String,
     }, // {name , url}
     languagepreference: String,
 
@@ -93,7 +82,6 @@ const UserSchema = new Schema({
         type: Boolean,
         default : false
     }
-
 },
 {
     timestamps : true

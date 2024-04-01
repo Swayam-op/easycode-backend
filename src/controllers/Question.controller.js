@@ -8,6 +8,7 @@ export async function getQuestions(req, res) {
   try {
     let conditions = [
       { $eq: ['$question', '$$questionId'] },
+      {$eq : ["$status", "notSolved"]} // we are writting invalid value for status sothat we don't get any result when user is not there.
     ]
     // console.log(req.user);
     if (req.user) {

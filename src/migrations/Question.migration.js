@@ -66,41 +66,50 @@ async function update(){
 // --------------------------------------INSERT ITEMS-------------------------
 
 const new_entries = [{
-    questionName : "Finding Prime Numbers in a Range",
+    questionName : "Pow(x, n)",
     description : [
-        "Given two integers L and R, inclusive, your task is to find and return all prime numbers in the range [L, R]. Write a function findPrimesInRange(L, R) that returns a list of prime numbers in ascending order.",
-        "A prime number is a natural number greater than 1 that is not a product of two smaller natural numbers. For example, 5 is a prime number because the only ways to write it as a product are 1 * 5 or 5 * 1."
-    ],
-    questionNo : 1,
-    hiddenCode : ["#include <bits/stdc++.h>\n using namespace std;","int main() { int T; cin >> T; for (int t = 1; t <= T; t++) { int L, R; cin >> L >> R; vector<int> result = findPrimesInRange(L, R); for (int i = 0; i < result.size(); i++) { cout << result[i]; if (i < result.size()-1 ) { cout << \" \"; } } cout <<endl; } return 0; }"],
-    recommendedCode : "vector<int> findPrimesInRange(int L, int R) {\n\n}",
-    testCases : "2 2 10 15 30\n",
-    testCasesToDisplay : ["L = 2 , R = 10", "L = 15, R = 30"],
-    expectedOutputOfTestCases : "2 3 5 7\n17 19 23 29\n",
-    expectedOutputOfTestCasesToDisplay : ["2 3 5 7","17 19 23 29"],
-    hiddenTestCases : "5 1 10 11 20 21 28 13 15 20 20\n",
-    hiddenTestCasesToDisplay : ["L = 1, R = 10", "L = 11, R = 20", "L = 21, R = 28", "L = 13, R = 15", "L = 20, R = 20"],
-    expectedOutputOfHiddenTestCases : "2 3 5 7\n11 13 17 19\n23\n13\n\n",
-    expectedOutputOfHiddenTestCasesToDisplay : ["2 3 5 7","11 13 17 19","23","13",""],
+        "Implement pow(x, n), which calculates x raised to the power n (i.e., xn)."
+     ],
+    questionNo : 3,
+    hiddenCode : ["#include <bits/stdc++.h>\n using namespace std;",'int main() { int T; cin >> T; while (T--) { double x; int n; cin>>x>>n; double result = doPow(x,n); cout << result<< endl; } return 0; }'],
+    recommendedCode : "double doPow(double x, int n){\n\n}",
+    testCases : "3 2.0 10 2.1 3 2.0 -2\n",
+    testCasesToDisplay : ["x = 2.0, n = 10", "x = 2.10, n = 3","x = 2.0, n = -2"],
+    expectedOutputOfTestCases : "1024\n9.261\n0.25\n",
+    expectedOutputOfTestCasesToDisplay : ["1024", "9.261", "0.25"],
+    hiddenTestCases : "5 2.0 10 2.10 3 2.0 -2 -3.5 2 -4.0 5\n",
+    hiddenTestCasesToDisplay : ["x = 2.0, n = 10", "x = 2.1, n = 3", "2.0, n = -2","x = -3.5, n = 2", "x = -4.0, n = 5"],
+    expectedOutputOfHiddenTestCases : "1024\n9.261\n0.25\n12.25\n-1024\n",
+    expectedOutputOfHiddenTestCasesToDisplay : ["1024","9.261","0.25","12.25","-1024"],
     examples : [
         {
-            input: "L = 2, R = 10",
-            output: "[3, 5, 7]",
-            explanation: "Prime numbers in the range [2, 10] are 3, 5, and 7."
+            input: "x = 2.0, n = 10",
+            output: "1024.0",
+            explanation: "2 raised to the power of 10 equals 1024."
         },
         {
-            input: "L = 15, R = 30",
-            output: "[17, 19, 23, 29]",
-            explanation: "Prime numbers in the range [15, 30] are 17, 19, 23, and 29."
+            "input": "x = 2.1, n = 3",
+            "output": "9.261",
+            "explanation": "2.1 raised to the power of 3 equals approximately 9.261."
         }
+        ,
+        {
+            "input": "x = 2.0, n = -2",
+            "output": "0.25",
+            "explanation": "2 raised to the power of -2 equals 1 divided by 2 squared, which is 1/4, or 0.25."
+        }
+        
     ],
     constraint : [
-        "You are encouraged to optimize your solution for larger input ranges.",
-        "(1 <= L <= R <= 10^6)"
+        "-100.0 < x < 100.0",
+        "-231 <= n <= 231-1",
+        "n is an integer.",
+        "Either x is not zero or n > 0",
+        "-104 <= xn <= 104"
     ],
-    answer : 'const std::string code = "bool isPrime(int n) {\n    if (n <= 1) return false;\n    for (int i = 2; i * i <= n; ++i) {\n        if (n % i == 0) return false;\n    }\n    return true;\n}\n\nvector<int> findPrimesInRange(int L, int R) {\n    vector<int> primes;\n    for (int i = L; i <= R; ++i) {\n        if (isPrime(i)) {\n            primes.push_back(i);\n        }\n    }\n    return primes;\n}";',
-    level : "easy",
-    Tags : "bruteforce",
+    answer : 'long long tn = n < 0 ? n*-1ll : n; double ans = 1.0; while(tn > 0){ if(tn%2){ ans = ans * x; tn--; } else{ x = x*x; tn = tn/2; } } if(n < 0){ return (double)1.0/(double)ans; } return ans;',
+    level : "medium",
+    Tags : "recursion",
     Author : "Swayam uchiha",
     isDelete : false
 },

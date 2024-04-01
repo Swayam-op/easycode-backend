@@ -205,3 +205,67 @@ export async function runCodeForTesting(req, res) {
     return res.status(STATUS.BADREQUEST).json({ message: error.message });
   }
 }
+
+
+export async function submitForTesting(req, res){
+  try {
+    const { question_id, language_id, source_code } = req.body;
+    if (!question_id || !language_id || !source_code) {
+      throw Error("Some fileds are empty");
+    }
+
+    //Get question details
+    const question = await Question.findOne({
+      _id: question_id,
+      isDelete: false,
+    });
+    console.log(question);
+    const hiddenTestCases = question.hiddenTestCases;
+    const originalSourceCode =
+      question.hiddenCode[0] + " " + source_code + " " + question.hiddenCode[1];
+    const expected_output = question.expectedOutputOfHiddenTestCases;
+
+    // Run code
+    const compiled_response = await compileAndRun(
+      language_id,
+      originalSourceCode,
+      hiddenTestCases,
+      expected_output
+    );
+    console.log(chalk.green("Code compiled successfully"));
+
+    //Updating response_data
+    let response_message = compiled_response.status.description;
+
+    let response_data = {
+      error_message: compiled_response.stderr
+        ? atob(compiled_response.stderr)
+        : "",
+      runTime_message: compiled_response.message
+        ? atob(compiled_response.message)
+        : "",
+      time_taken: compiled_response.time,
+      memory: compiled_response.memory / 1024,
+      compile_output: compiled_response.compile_output
+        ? atob(compiled_response.compile_output)
+        : "",
+      submitedAtTime: new Date().toLocaleString(),
+      source_code: source_code,
+      statusId: compiled_response.status.id,
+      expected_output : atob(compiled_response.expected_output),
+      output : atob(compiled_response.stdout)
+      // outputToDisplay : compiled_response.stdout ?convertOutputStringToArray(atob(compiled_response.stdout)) : [],
+      // hiddenTestCasesToDisplay:question.hiddenTestCasesToDisplay,
+      // expectedOutputOfHiddenTestCases : question. expectedOutputOfHiddenTestCases,
+    };
+    response_message = compiled_response.status.description;
+
+    res.status(STATUS.ACCEPTED).json({
+      message: response_message,
+      data: response_data,
+    });
+  }
+  catch(error){
+    console.log("error in submit testing : ", error)
+  }
+}
