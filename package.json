@@ -6,7 +6,8 @@
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "nodemon src/index_dev.js"
+    "dev": "nodemon src/index_dev.js",
+    "dev_test" : "nodemon api/index.js"
   },
   "keywords": [],
   "author": "",
