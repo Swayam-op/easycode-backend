@@ -95,23 +95,17 @@ export const updateUserDetails = asyncHandler(async (req, res) => {
 
 
 export const uploadProfilePicture = asyncHandler(async (req, res) => {
-
+    
     if (req.errorMessage) {
         throw new ApiError(STATUS.BADREQUEST, req.errorMessage);
     }
     else {
-        if (!req.file || !req.file.path) {
+        const file = req.file;
+        if (!file) {
             throw new ApiError(STATUS.BADREQUEST, 'Please select a file');
         }
-        console.log("file path in upload picture controller", req.file.path)
-        fs.access(req.file.path, fs.constants.F_OK, (err) => {
-            if (err) {
-                throw new ApiError(STATUS.BADREQUEST, "File is not present in public/uploads");
-            }
-        
-            console.log('File exists');
-        });
-        const result = await cloudinary.uploader.upload(req.file.path);
+        console.log("file path in upload picture controller")
+        const result = await cloudinary.uploader.upload(file.buffer);
         // Send the Cloudinary URL of the uploaded image back to the frontend
 
         res.status(STATUS.ACCEPTED).json({ message: "Image uploaded successfully", data: { imageUrl: result.secure_url } });
@@ -120,12 +114,12 @@ export const uploadProfilePicture = asyncHandler(async (req, res) => {
     }
     // console.log("file is", req.file);
 
-    //delete file from uploads folder
-    fs.unlink(req.file.path, (err) => {
-        if (err) {
-            console.error('Error deleting file:', err);
-            return;
-        }
-        console.log('File deleted successfully');
-    });
+    //delete file from uploads folder -----------------------------------DONT USE ON LIVE-----------------------------
+    // fs.unlink(req.file.path, (err) => {
+    //     if (err) {
+    //         console.error('Error deleting file:', err);
+    //         return;
+    //     }
+    //     console.log('File deleted successfully');
+    // });
 })

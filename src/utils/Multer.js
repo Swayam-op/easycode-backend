@@ -3,18 +3,18 @@ import { ApiError } from "./ApiError.js";
 import { STATUS } from "./StatusCode.js";
 import path from 'path';
 
-
-const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-        console.log("inside destination funciton")
-        cb(null,'public/Uploads');
-    },
-    filename: function (req, file, cb) {
-        console.log("inside filename funciton")
-        console.log("filename", file.originalname)
-        cb(null, file.originalname);
-    }
-});
+// --------------DONT USE ON LIVE----------------------
+// const storage = multer.diskStorage({
+//     destination: function (req, file, cb) {
+//         console.log("inside destination funciton")
+//         cb(null,'public/Uploads');
+//     },
+//     filename: function (req, file, cb) {
+//         console.log("inside filename funciton")
+//         console.log("filename", file.originalname)
+//         cb(null, file.originalname);
+//     }
+// });
 
 // Define the file filter function to check file extension and size
 const fileFilter = (req, file, cb) => {
@@ -36,6 +36,6 @@ const fileFilter = (req, file, cb) => {
 };
 
 export const upload = multer({
-    storage: storage,
+    storage: multer.memoryStorage(),
     fileFilter: fileFilter
 });
