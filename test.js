@@ -1,12 +1,12 @@
-int main() {
-    int T;
-    cin >> T;
-    while (T--) {
-        double x;
-        int n;
-        cin>>x>>n;
-        double result = doPow(x,n);
-        cout << result<< endl;
-    }
-    return 0;
-}
+// {
+//     "version": 2,
+//     "rewrites": [
+//         {
+//             "source": "/(.*)",
+//             "destination": "src/app.js"
+//         }
+//     ],
+//     "builds": [
+//         { "src": "src/index.js", "use": "@vercel/node" }
+//       ]
+// }
