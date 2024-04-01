@@ -3,6 +3,7 @@ import express from "express";
 import { Server } from 'socket.io';
 import {createServer} from 'http';
 
+
 const app = express();
 
 const corsOptions ={
@@ -13,7 +14,7 @@ const corsOptions ={
 };
 app.use(cors(corsOptions));
 app.use(express.json());
-app.use(express.static('public'));
+app.use(express.static('/public'));
 
 
 const server = createServer(app);
@@ -33,6 +34,13 @@ import QuestionRouter from "./routers/Question.Router.js";
 import SolutionRouter from './routers/Solution.Router.js';
 import DiscussionRouter from './routers/Discussion.Router.js'
 import { create } from "domain";
+
+
+//API TESTING
+app.get('/test',(req, res)=>{
+  res.json({message : "working"});
+})
+
 //use routers
 app.use('/v1/public_api',AuthRouter);
 app.use('/v1/private_api/auth',AuthRouter);

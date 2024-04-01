@@ -2,17 +2,12 @@ import multer from "multer";
 import { ApiError } from "./ApiError.js";
 import { STATUS } from "./StatusCode.js";
 import path from 'path';
-import { fileURLToPath } from 'url';
-import { dirname } from 'path';
-
-const __filename = fileURLToPath(import.meta.url);
-export const __dirname = dirname(__filename);
 
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
         console.log("inside destination funciton")
-        cb(null,path.join(__dirname,'../','../' ,'/public/Uploads'));
+        cb(null,'public/Uploads');
     },
     filename: function (req, file, cb) {
         console.log("inside filename funciton")

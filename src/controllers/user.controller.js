@@ -7,7 +7,6 @@ import Submission from "../models/Submission.model.js";
 import Question from "../models/Question.model.js";
 import cloudinary from "../utils/Cloudnary.js";
 import fs from 'fs';
-import { __dirname } from "../utils/Multer.js";
 import { ApiError } from "../utils/ApiError.js";
 
 export const getUserDetails = asyncHandler(async (req, res) => {
