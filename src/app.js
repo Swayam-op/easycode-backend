@@ -7,7 +7,7 @@ import {createServer} from 'http';
 const app = express();
 
 const corsOptions ={
-    origin: process.env.FRONT_END_URL ||  "http://localhost:3000", 
+    origin: "*", 
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials:true,            //access-control-allow-credentials:true
     optionSuccessStatus:200
