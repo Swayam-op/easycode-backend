@@ -1,14 +1,14 @@
 import { configDotenv } from "dotenv";
-import { connectDb } from "../src/DB/index.js";
+// import { connectDb } from "../src/DB/index.js";
 // import { server } from "../src/app.js";
-import { setUpCloudinary } from "../src/utils/Cloudnary.js";
+// import { setUpCloudinary } from "../src/utils/Cloudnary.js";
 
 import cors from "cors";
 import express from "express";
 import { Server } from 'socket.io';
 import {createServer} from 'http';
 
-
+configDotenv({path:'.env'});
 const app = express();
 
 const corsOptions ={
@@ -21,11 +21,14 @@ app.use(cors(corsOptions));
 app.use(express.json());
 app.use(express.static('/public'));
 
+app.get('/',(req, res)=>{
+    res.json("hellow")
+})
 
 const server = createServer(app);
 
 server.listen(process.env.PORT,()=>{
-    console.log("server is listening");
+    console.log("server is listening", );
 })
 
 // const io = new Server(server, {
@@ -80,7 +83,7 @@ server.listen(process.env.PORT,()=>{
 
 // export {server, io};
 
-// configDotenv({path:'.env'});
+
 
 
 // //Connect Database
