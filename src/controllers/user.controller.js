@@ -31,7 +31,7 @@ export const getUserDetails = asyncHandler(async (req, res) => {
     ])
     const questionsSolvedDetails = {
         totalQuestions: totalNumberQuestions,
-        totalSolvedQuestions: totalQuestionSolved[0].count,
+        totalSolvedQuestions: totalQuestionSolved[0] ? totalQuestionSolved[0].count : 0,
         totalEasy,
         totalMedium,
         totalHard,
