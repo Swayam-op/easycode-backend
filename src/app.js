@@ -56,7 +56,7 @@ app.use('/v1/private_api/discussion',DiscussionRouter);
 
 //Global Error Middleware
 app.use((err, req, res, next)=>{
-        const status = err.status || 500;
+        const status = err.statusCode || 500;
         const message = err.message;
         const data = err.data || null;
         console.log("Error in GLOBAL ERROR MIDDLEWARE is ", err);
