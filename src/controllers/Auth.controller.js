@@ -59,7 +59,7 @@ export const signup = asyncHandler(async (req, res) => {
   console.log(req.body);
 
   if (inputCheck.success === false) {
-    throw Error(inputCheck.message);
+    throw ApiError(STATUS.BADREQUEST, inputCheck.message);
   }
 
   const { username, email, password, confirmpassword } = inputCheck.data;
